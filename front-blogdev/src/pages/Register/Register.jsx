@@ -1,5 +1,7 @@
 import React from 'react'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { userAuthentication } from '../../hooks/userAuthentication'
+
 
 const Register = () => {
   const [displayName, setDisplayName] = useState('')
@@ -7,7 +9,10 @@ const Register = () => {
   const [password, setPassoword] = useState('')
   const [confirmedPassword, setCorfimedPassord] = useState('')
   const [error, setError] = useState('')
-  const handlerSubmit = (e) => {
+
+  const {creatUser, error: authError, loading} = userAuthentication()
+  
+  const handlerSubmit = async (e) => {
     e.preventDefault()
     setError('')
     const user = {
@@ -20,7 +25,10 @@ const Register = () => {
       setError('As senhas precisam ser iguais, onii-chan >.<"')
       return
     }
-    console.table(user)
+
+    const res = await creatUser(user)
+
+    console.table(res)
   }
   return (
     <div>
