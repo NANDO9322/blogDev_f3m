@@ -1,16 +1,14 @@
-import React from 'react'
 import { useState, useEffect } from 'react'
 import { userAuthentication } from '../../hooks/userAuthentication'
-
 
 const Register = () => {
   const [displayName, setDisplayName] = useState('')
   const [email, setEmail] = useState('')
-  const [password, setPassoword] = useState('')
-  const [confirmedPassword, setCorfimedPassord] = useState('')
+  const [password, setPassword] = useState('')
+  const [confirmedPassword, setCorfimedPassword] = useState('')
   const [error, setError] = useState('')
 
-  const {creatUser, error: authError, loading} = userAuthentication()
+  const {createUser, error: authError, loading} = userAuthentication()
   
   const handlerSubmit = async (e) => {
     e.preventDefault()
@@ -26,10 +24,15 @@ const Register = () => {
       return
     }
 
-    const res = await creatUser(user)
+    const res = await createUser(user)
 
     console.table(res)
   }
+  useEffect(() => {
+    if(authError){
+      setError(authError)
+    }
+  },[authError])
   return (
     <div>
       <h1>Compartilhe suas experiências com outros nomades</h1>
@@ -43,7 +46,6 @@ const Register = () => {
             onChange={(e) => setDisplayName(e.target.value)}
             placeholder='Entre com seu nome nomade' />
         </label>
-
         <label>
           <span>E-mail: </span>
           <input type="email"
@@ -53,30 +55,27 @@ const Register = () => {
             onChange={(e) => setEmail(e.target.value)}
             placeholder='Entre com seu e-mail' />
         </label>
-
         <label>
           <span>Senha: </span>
           <input type="password"
             name="password"
             required
             value={password}
-            onChange={(e) => setPassoword(e.target.value)}
+            onChange={(e) => setPassword(e.target.value)}
             placeholder='Entre com sua senha' />
         </label>
-
         <label>
           <span>Confirmação: </span>
           <input type="password"
             name="confirmedPassword"
             required
             value={confirmedPassword}
-            onChange={(e) => setCorfimedPassord(e.target.value)}
+            onChange={(e) => setCorfimedPassword(e.target.value)}
             placeholder='Entre com sua senha' />
-        </label>
-        
-        <button className='btn'>Cadastrar</button>
+        </label>        
+        {!loading && <button className='btn'>Cadastrar</button>}
+        {loading && <button className='btn'>Aguarde...</button>}
         {error && <p className='error'>{error}</p>}
-
       </form>
     </div>
   )
