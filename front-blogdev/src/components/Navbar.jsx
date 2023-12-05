@@ -1,5 +1,5 @@
 import React from 'react'
-import { NavLink } from 'react-router-dom'
+import { NavLink, useNavigate } from 'react-router-dom'
 import styles from './Navbar.module.css'
 
 const Navbar = () => {
@@ -25,6 +25,12 @@ const Navbar = () => {
             <NavLink to='/about'
             className={({isActive}) => (isActive ? styles.active :null)}>About</NavLink>
           </li>
+          {user && (
+            <li>
+              <NavLink to='/post/create'
+              className={({isActive}) => (isActive ? styles.active :null)}>Create Post</NavLink>
+            </li>
+          )	}
         </ul>
       </nav>
     </>

@@ -1,12 +1,12 @@
-import { db } from '../firebase/config';
+import { db } from "../firebase/config";
 import {
   getAuth,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   updateProfile,
   signOut,
-} from 'firebase/auth';
-import { useState, useEffect } from 'react';
+} from "firebase/auth";
+import { useState, useEffect } from "react";
 
 //Autentição-Criação
 export const userAuthentication = () => {
@@ -60,49 +60,51 @@ export const userAuthentication = () => {
       setError(systemErrorMessage);
     }
   }
-  async function userLogin (data){
+
+  const logout = (data) => {
     checkIfIsCancelled();
+    signOut(auth);
+  };
+
+  const login = async (data) => {
+    checkIfIsCancelled();
+
     setLoading(true);
-    setError(null);
+    setError(false);
 
     try {
-      const { user } = await signInWithEmailAndPassword(
-        auth,
-        data.email,
-        data.password
-      );
-
-      setLoading(false);
-
-      return user;
+      await signInWithEmailAndPassword(auth, data.email, data.password);
+      setLoading(false)
     } catch (error) {
       console.error(error.message);
       console.table(typeof error.message);
 
       let systemErrorMessage;
 
-      if (error.message.includes("invalid")) {
-        systemErrorMessage =
-          "Informações de login ta esquisita, Konoyaro!";
+      if (error.message.includes("invalid-login-credentials")) {
+        systemErrorMessage = "Este usuário nao está logando, Sensei!";
+      } else if (error.message.includes("wrong-password")) {
+        systemErrorMessage = "Há erro com suas credenciais, Baaaaka!";
       } else {
         systemErrorMessage =
-          "Ocorreu um erro, tente novamente mais tarde, Bakayaro!";
+          "Ocorreu um erro, tente novamente mais tarde, Baaaaka!";
       }
 
       setLoading(false);
       setError(systemErrorMessage);
     }
+  };
 
-  }
   useEffect(() => {
-    return () => setCancelled(true); 
+    return () => setCancelled(true);
   }, []);
 
-    return {
-        auth,
-        createUser,
-        userLogin,
-        error,
-        loading,
-    }
-}
+  return {
+    auth,
+    createUser,
+    error,
+    loading,
+    login,
+    logout,
+  };
+};
