@@ -1,8 +1,10 @@
 import React from 'react'
 import { NavLink, useNavigate } from 'react-router-dom'
 import styles from './Navbar.module.css'
+import { useAuthValue } from '../context/AuthContext'
 
 const Navbar = () => {
+  const { user } = useAuthValue()
   return (
     <>
       <nav className={styles.navbar}>
@@ -29,6 +31,12 @@ const Navbar = () => {
             <li>
               <NavLink to='/post/create'
               className={({isActive}) => (isActive ? styles.active :null)}>Create Post</NavLink>
+            </li>
+          )	}  {user && (
+            <li>
+              <>
+              <button onclick={logout} className={styles.logout}>Logout</button>
+              </>
             </li>
           )	}
         </ul>
