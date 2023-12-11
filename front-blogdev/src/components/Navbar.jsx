@@ -2,8 +2,11 @@ import React from 'react'
 import { NavLink, useNavigate } from 'react-router-dom'
 import styles from './Navbar.module.css'
 import { useAuthValue } from '../context/AuthContext'
+import { userAuthentication } from '../hooks/userAuthentication'
 
 const Navbar = () => {
+  const { logout } = userAuthentication()
+  const navigate = useNavigate()
   const { user } = useAuthValue()
   return (
     <>
@@ -35,7 +38,10 @@ const Navbar = () => {
           )	}  {user && (
             <li>
               <>
-              <button onclick={logout} className={styles.logout}>Logout</button>
+              <button onClick={() => {
+                logout()
+                navigate('/')
+              }} className={styles.logout}>Logout</button>
               </>
             </li>
           )	}
