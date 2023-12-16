@@ -12,6 +12,9 @@ import Footer from "./components/Footer";
 import Register from "./pages/Register/Register";
 import Login from "./pages/Login/Login";
 import CreatePost from "./pages/CreatePost/CreatePost";
+import Dashboard from "./pages/Dashboard/Dashboard";
+import EditPost from "./pages/EditPost/EditPost";
+import Post from "./pages/Post/Post";
 
 function App() {
   const [user, setUser] = useState(undefined);
@@ -67,6 +70,9 @@ function App() {
               <Route path="/register" element={<Register />}></Route>
               <Route path="/login" element={<Login />}></Route>
               <Route path="/post/create" element={<CreatePost />}> </Route>
+              <Route path="/dashboard" element={<Dashboard />}></Route>
+              <Route path="/posts/edit/:id" element={<EditPost />}></Route>
+              <Route path="/posts/:id" element={<Post />}></Route>
             </Routes>
           </div>
           <Footer />

@@ -18,9 +18,19 @@ const Login = () => {
     const user = {
       email,
       password,
-    };
+    };  
 
-    const res = await login(user);
+    try {
+      const res = await login(user);
+      
+      if (res){
+        navigate("/post/create");
+        return;
+      }
+
+    } catch (error) {
+      console.error(error.message);
+    }
 
     console.table(res);
     navigate("/post/create");

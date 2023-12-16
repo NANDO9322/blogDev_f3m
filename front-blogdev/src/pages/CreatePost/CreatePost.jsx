@@ -12,13 +12,11 @@ const CreatePost = () => {
   const [formError, setFormError] = useState("");
 
   const { user } = useAuthValue();
-
   const navigate = useNavigate();
-
-  const { insertDocuemnt, response } = userInsertDocument("posts");
+  const { insertDocument, error, loading } = userInsertDocument("posts");
 
   const handlerSubmit = (e) => {
-    e, preventDefault();
+    e.preventDefault();
     setFormError("");
 
     try {
@@ -48,14 +46,23 @@ const CreatePost = () => {
 
     if (formError) return;
 
-    insertDocuemnt({
-      title,
-      image,
-      body,
-      tags: tagsArray,
-      uid: user.uid,
-      createBy: user.displayName,
-    });
+    try {
+      const refDoc = insertDocument({
+        title,
+        image,
+        body,
+        tags: tagsArray,
+        uid: user.uid,
+        createBy: user.displayName,
+      });
+      
+      if(refDoc) {
+        navigate('/')
+      }
+    } catch (error) {
+      
+    }
+
   };
 
   return (
@@ -111,14 +118,14 @@ const CreatePost = () => {
               required
             />
           </label>
-          {!response.loading && <button className="btn">Criar Postagem</button>}
-          {response.loading && (
+          {!loading && <button className="btn">Criar Postagem</button>}
+          {loading && (
             <button className="btn" disabled>
               Postando...
             </button>
           )}
-          {response.error && (
-            <p className="error">{response.error || formError}</p>
+          {error && (
+            <p className="error">{error || formError}</p>
           )}
         </form>
       </div>
